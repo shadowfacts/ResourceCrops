@@ -1,0 +1,3 @@
+[submodule "ShadowCore"]
+	path = ShadowCore
+	url = git@github.com:shadowfacts/ShadowCore.git
