@@ -1,0 +1,82 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
+}
+
+repositories {
+	maven { // Chicken Bones
+		url = "http://chickenbones.net/maven/"
+	}
+}
+
+apply plugin: 'forge'
+apply plugin: 'maven'
+
+version = "$minecraft_version-$mod_version"
+
+if (System.getenv().DRONE_BUILD_NUMBER != null) {
+	version += "-snapshot-" + System.getenv().DRONE_BUILD_NUMBER
+}
+
+minecraft {
+	version = "$minecraft_version-$forge_version"
+	runDir = "run"
+
+	replaceIn "resourcecrops/ResourceCrops.java"
+	replace '@VERSION@', "$mod_version"
+}
+
+dependencies {
+	compile project(":ShadowCore")
+
+	compile group: 'codechicken', name: 'CodeChickenLib', version: "$minecraft_version-$ccl_version", classifier: 'dev'
+	compile group: 'codechicken', name: 'CodechickenCore', version: "$minecraft_version-$ccc_version", classifier: 'dev'
+	compile group: 'codechicken', name: 'NotEnoughItems', version: "$minecraft_version-$nei_version", classifier: 'dev'
+}
+
+processResources {
+	inputs.property "version", "$mod_version"
+
+	from(sourceSets.main.resources.srcDirs) {
+		include '**/*.info'
+		expand 'version':"$mod_version", 'mcversion':"$minecraft_version"
+	}
+
+	from (sourceSets.main.resources.srcDirs) {
+		exclude '**/*.info'
+	}
+}
+
+task deobfJar(type: Jar) {
+	from sourceSets.main.output
+	classifier = 'deobf'
+}
+
+tasks.build.dependsOn deobfJar
+
+artifacts {
+	archives jar
+	archives deobfJar
+}
+
+uploadArchives {
+	repositories.mavenDeployer {
+		repository(url: "file:///maven/")
+	}
+}
+
+
+// IDEA bug
+idea { module { inheritOutputDirs = true } }
