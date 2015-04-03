@@ -42,7 +42,7 @@ dependencies {
 	compile project(":ShadowCore")
 
 	compile group: 'codechicken', name: 'CodeChickenLib', version: "$minecraft_version-$ccl_version", classifier: 'dev'
-	compile group: 'codechicken', name: 'CodechickenCore', version: "$minecraft_version-$ccc_version", classifier: 'dev'
+	compile group: 'codechicken', name: 'CodeChickenCore', version: "$minecraft_version-$ccc_version", classifier: 'dev'
 	compile group: 'codechicken', name: 'NotEnoughItems', version: "$minecraft_version-$nei_version", classifier: 'dev'
 }
 
