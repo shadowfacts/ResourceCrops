@@ -2,12 +2,18 @@ package net.shadowfacts.resourcecrops;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
+import net.shadowfacts.resourcecrops.block.RCCrop;
+import net.shadowfacts.resourcecrops.item.RCSeed;
 import net.shadowfacts.resourcecrops.proxy.CommonProxy;
 import net.shadowfacts.shadowcore.Log;
+import net.shadowfacts.shadowcore.config.ConfigManager;
 
 /**
  * Main mod file.
@@ -29,12 +35,26 @@ public class ResourceCrops {
 	@SidedProxy(clientSide = ResourceCrops.clientProxyString, serverSide = ResourceCrops.serverProxyString)
 	public static CommonProxy proxy;
 
-	// Logger
+//	Logger
 	public static final Log log = new Log(modId);
+
+
+	public static RCCrop ironCrop;
+	public static RCSeed ironSeed;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+//		Config stuff
+		ConfigManager.instance.register("ResourceCrops", RCConfig.class);
+		ConfigManager.instance.load("ResourceCrops");
 
+		ironCrop = new RCCrop("ironCrop", Items.iron_ingot, ironSeed);
+		ironCrop.setCreativeTab(CreativeTabs.tabMisc);
+		ironSeed = new RCSeed("ironSeed", ironCrop);
+		ironSeed.setCreativeTab(CreativeTabs.tabMisc);
+
+		GameRegistry.registerBlock(ironCrop, "ironCrop");
+		GameRegistry.registerItem(ironSeed, "ironSeed");
 	}
 
 	@Mod.EventHandler
