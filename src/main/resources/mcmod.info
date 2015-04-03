@@ -1,0 +1,16 @@
+[
+{
+  "modid": "resourcecrops",
+  "name": "ResourceCrops",
+  "description": "Growable resources from lots and lots of different mods!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["shadowfacts"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
